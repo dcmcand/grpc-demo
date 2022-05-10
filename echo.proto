@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package echo;
+option go_package = "./pb";
+
+message EchoRequest {
+    string message = 1;
+    uint64 times = 2;
+}
+
+message EchoResponse {
+    repeated string response_message = 1;
+}
+
+service Echo {
+    rpc Echo(EchoRequest) returns (EchoResponse){}
+}
