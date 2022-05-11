@@ -23,7 +23,11 @@ func main() {
 	}
 
 	var conn *grpc.ClientConn
-	conn, err = grpc.Dial(fmt.Sprintf(":%d", listeningPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err = grpc.Dial(
+		fmt.Sprintf(":%d", listeningPort),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*20)),
+	)
 	if err != nil {
 		log.Fatalf("Could not connect to server: %v", err)
 	}
@@ -32,7 +36,7 @@ func main() {
 	log.Printf("Sending \"Hello There\"")
 	req := &pb.EchoRequest{
 		Message: "Hello There",
-		Times:   43,
+		Times:   1000000,
 	}
 	response, err := c.Echo(context.Background(), req)
 	if err != nil {

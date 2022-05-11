@@ -32,7 +32,7 @@ func main() {
 	}
 
 	s := Server{}
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(grpc.MaxSendMsgSize(1024 * 1024 * 1024))
 	pb.RegisterEchoServer(grpcServer, &s)
 
 	if err := grpcServer.Serve(lis); err != nil {
