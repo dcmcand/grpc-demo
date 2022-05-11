@@ -12,10 +12,14 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+// Change the following two variables to change the client request
+var msg string = "Pete and Repeat went out in a boat. Pete fell out. Who is left?" // the message to be echoed
+var repeats uint64 = 100                                                           // the number of times to echo it
+
 func main() {
 	port, ok := os.LookupEnv("PORT")
 	if !ok {
-		port = "8080"
+		port = "9000"
 	}
 	listeningPort, err := strconv.Atoi(port)
 	if err != nil {
@@ -33,10 +37,10 @@ func main() {
 	}
 	defer conn.Close()
 	c := pb.NewEchoClient(conn)
-	log.Printf("Sending \"Hello There\"")
+	log.Printf("Sending \"%s\" %d times", msg, repeats)
 	req := &pb.EchoRequest{
-		Message: "Hello There",
-		Times:   1000000,
+		Message: msg,
+		Times:   repeats,
 	}
 	response, err := c.Echo(context.Background(), req)
 	if err != nil {
